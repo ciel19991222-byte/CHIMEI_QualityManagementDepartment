@@ -27,9 +27,8 @@
     <style>
         /* 1. 沉浸式背景：使用圖片+深色疊加模擬醫療背景 */
         body {
-            /* ⚠️ 錯誤修正：短網址無法在 CSS 中顯示，暫時替換為藍色預留圖。
-               請提供圖片直接連結 (需以 .jpg/.png 結尾) 貼到此處！ */
-            background-image: url('https://placehold.co/1920x1080/2563eb/ffffff?text=PLEASE+PROVIDE+DIRECT+IMAGE+LINK'); 
+            /* 背景圖片已更新為 GitHub 原始連結，以確保正常載入 */
+            background-image: url('https://raw.githubusercontent.com/ciel19991222-byte/CHIMEI_QualityManagementDepartment/main/%E7%B6%B2%E9%A0%81%E8%83%8C%E6%99%AF.png'); 
             background-size: cover;
             background-position: center;
             background-attachment: fixed; /* 增加深度感 */
@@ -146,12 +145,23 @@
                     <h2 class="text-4xl sm:text-5xl font-black text-primary-dark tracking-wider mb-6 lg:hidden">
                         品質管理部
                     </h2>
-                    <!-- 藍色分隔線 -->
-                    <div class="w-20 h-1 bg-accent-blue mx-auto mb-8 rounded"></div>
                     
-                    <!-- 名言: 顏色為深灰，適應白色背景 -->
-                    <p class="text-lg sm:text-xl text-gray-700 leading-relaxed font-normal italic max-w-3xl mx-auto">
-                        "昨天的我很聰明，所以我想改變世界。今天的我充滿智慧，所以我正在改變自己。"
+                    <!-- 名言: 顏色為深灰，適應白色背景，且已是置中顯示。將中文、英文和作者分行。 -->
+                    <p class="text-lg sm:text-xl text-gray-700 leading-relaxed font-normal max-w-3xl mx-auto mt-8">
+                        <!-- 中文名言 (保持斜體，使用較深的灰色) -->
+                        <span class="italic text-gray-700">
+                            "昨天的我很聰明，所以我想改變世界。今天的我充滿智慧，所以我正在改變自己。"
+                        </span>
+                        
+                        <!-- 英文名言 (下一行，使用 block 確保換行，字體較小且較淡) -->
+                        <span class="block mt-3 text-base sm:text-lg font-light text-gray-600">
+                             Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.
+                        </span>
+                        
+                        <!-- 作者資訊 (再下一行，字體最小，顏色更淡) -->
+                        <span class="block mt-4 not-italic font-medium text-sm text-gray-500">
+                             —十三世紀波斯詩人｜Rumi
+                        </span>
                     </p>
                 </section>
             </div>
