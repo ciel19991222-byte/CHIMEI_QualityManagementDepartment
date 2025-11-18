@@ -82,7 +82,7 @@
         #main-dashboard-container {
             position: relative; /* 確保在 body::before 上方 */
             z-index: 10;
-            padding-top: 4rem; 
+            padding-top: 2rem; /* 留給導航菜單空間 */
             max-width: 1280px; 
             margin: 0 auto;
             padding-left: 2rem;
@@ -104,6 +104,19 @@
                 justify-content: center;
                 align-items: flex-start; /* 左對齊文字和按鈕 */
             }
+        }
+
+        /* 導航按鈕樣式 - 獨立的方塊卡片風格 (白色文字, 深色框) */
+        .nav-button {
+            /* 保持白色文字，使用暗色背景/邊框以達成「框框」效果 */
+            @apply px-6 py-3 text-lg font-semibold rounded-xl transition duration-300 shadow-lg text-white 
+                   bg-primary-dark/80 backdrop-blur-md border-2 border-primary-dark hover:bg-primary-dark hover:shadow-xl;
+        }
+
+        /* 選中按鈕樣式 */
+        .nav-button.active {
+            /* 選中時使用亮藍色強調，並放大 */
+            @apply bg-accent-blue border-accent-blue shadow-2xl transform scale-[1.05];
         }
         
     </style>
@@ -173,67 +186,162 @@
     <!-- ============== 模式 2: 主儀表板 (Dashboard) ============== -->
     <main id="main-dashboard-container" class="hidden">
 
-        <!-- 回到起始頁按鈕 (方便測試和導航) -->
+        <!-- 回到起始頁按鈕 -->
         <button onclick="showLandingPage()" class="fixed top-4 right-4 z-50 px-4 py-2 text-sm font-semibold rounded-full bg-white/90 text-primary-dark shadow-xl hover:bg-white transition duration-300">
             &larr; 回到起始頁
         </button>
-
-        <!-- 核心價值 (已從 Landing Page 移動到 Dashboard) -->
-        <section id="value" class="mb-20">
-            <h3 class="text-4xl font-bold text-center text-white mb-14 bg-primary-dark/60 py-3 rounded-xl">品質管理部核心價值</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <!-- 卡片 1: 人本 (使用 glass-card) -->
-                <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
-                    <div class="text-4xl mb-4 text-accent-blue">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    </div>
-                    <h4 class="text-xl font-bold mb-1 text-primary-dark">人本 (Patient-Centered)</h4>
-                    <p class="text-base text-gray-600">以病人為中心，提供具人性溫度的照護服務。</p>
-                </div>
-
-                <!-- 卡片 2: 創新 (使用 glass-card) -->
-                <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
-                    <div class="text-4xl mb-4 text-accent-blue">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="2" rx="1" ry="1"/><path d="M12 11v6"/><path d="M9 14h6"/></svg>
-                    </div>
-                    <h4 class="text-xl font-bold mb-1 text-primary-dark">創新 (Innovation)</h4>
-                    <p class="text-base text-gray-600">持續優化流程，提升品質管理效能。</p>
-                </div>
-
-                <!-- 卡片 3: 卓越 (使用 glass-card) -->
-                <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
-                    <div class="text-4xl mb-4 text-accent-blue">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    </div>
-                    <h4 class="text-xl font-bold mb-1 text-primary-dark">卓越 (Excellence)</h4>
-                    <p class="text-base text-gray-600">追求最高品質標準，成為高信賴照護典範。</p>
-                </div>
-
+        
+        <!-- 主導覽按鈕群組 (Sticky 效果) -->
+        <nav class="sticky top-0 z-40 mb-12 flex justify-center lg:justify-start overflow-x-auto">
+            <!-- 使用 flex space-x-4 讓按鈕並排且有間隔 -->
+            <div class="flex space-x-4">
+                <!-- 導覽按鈕: 已套用 .nav-button 樣式 (獨立框框+白色文字) -->
+                <button data-view="about" class="nav-button active" onclick="showView('about', this)">
+                    關於我們
+                </button>
+                <button data-view="safety" class="nav-button" onclick="showView('safety', this)">
+                    病人安全
+                </button>
+                <button data-view="quality" class="nav-button" onclick="showView('quality', this)">
+                    醫療品質
+                </button>
+                <button data-view="activity" class="nav-button" onclick="showView('activity', this)">
+                    活動成果
+                </button>
             </div>
-        </section>
+        </nav>
 
-        <!-- 部內組織 (高信賴照護的基石) -->
-        <section id="organization" class="mb-20">
-            <!-- 標題文字改為白色，並加上深色半透明背景，確保在任何背景圖上都可見 -->
-            <h3 class="text-4xl font-bold text-center text-white mb-14 bg-primary-dark/60 py-3 rounded-xl">高信賴照護的組織基石</h3>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <!-- ============== 內容區塊 1: 關於我們 (核心價值) - 預設顯示 ============== -->
+        <div id="view-about" class="content-view">
+            <section id="value" class="mb-20">
+                <!-- 這就是往下移動時會看見的核心價值區塊 -->
+                <h3 class="text-4xl font-bold text-center text-white mb-14 bg-primary-dark/60 py-3 rounded-xl">品質管理部核心價值</h3>
                 
-                <!-- 組織卡片模板 -->
-                <div class="glass-card p-8 rounded-3xl hover:bg-white/70 transition duration-300 transform hover:translate-y-[-4px]">
-                    <h4 class="text-2xl font-bold text-accent-blue mb-2">醫療品質</h4>
-                    <p class="text-base text-gray-700">專注於醫療服務流程最佳化與成效監測，追求卓越的醫療成果。</p>
-                    <a href="#" class="text-base text-accent-blue hover:text-blue-700 mt-4 block font-semibold border-b border-accent-blue/50 w-fit">查看專案計畫 &rarr;</a>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- 卡片 1: 人本 (使用 glass-card) -->
+                    <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
+                        <div class="text-4xl mb-4 text-accent-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-1 text-primary-dark">人本 (Patient-Centered)</h4>
+                        <p class="text-base text-gray-600">以病人為中心，提供具人性溫度的照護服務。</p>
+                    </div>
+
+                    <!-- 卡片 2: 創新 (使用 glass-card) -->
+                    <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
+                        <div class="text-4xl mb-4 text-accent-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="2" rx="1" ry="1"/><path d="M12 11v6"/><path d="M9 14h6"/></svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-1 text-primary-dark">創新 (Innovation)</h4>
+                        <p class="text-base text-gray-600">持續優化流程，提升品質管理效能。</p>
+                    </div>
+
+                    <!-- 卡片 3: 卓越 (使用 glass-card) -->
+                    <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
+                        <div class="text-4xl mb-4 text-accent-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-1 text-primary-dark">卓越 (Excellence)</h4>
+                        <p class="text-base text-gray-600">追求最高品質標準，成為高信賴照護典範。</p>
+                    </div>
+
                 </div>
-                
+            </section>
+        </div>
+
+
+        <!-- ============== 內容區塊 2: 病人安全 ============== -->
+        <div id="view-safety" class="content-view hidden">
+            <h3 class="text-4xl font-bold text-center text-white mb-14 bg-primary-dark/60 py-3 rounded-xl">病人安全 - 預防與通報機制</h3>
+            
+            <!-- 組織職責: 病人安全 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 <div class="glass-card p-8 rounded-3xl hover:bg-white/70 transition duration-300 transform hover:translate-y-[-4px]">
-                    <h4 class="text-2xl font-bold text-accent-blue mb-2">病人安全</h4>
+                    <h4 class="text-3xl font-bold text-accent-blue mb-2">專責單位：病人安全</h4>
                     <p class="text-base text-gray-700">負責通報系統、根本原因分析與風險預防機制，保障病人權益與安全。</p>
                     <a href="#" class="text-base text-accent-blue hover:text-blue-700 mt-4 block font-semibold border-b border-accent-blue/50 w-fit">安全指引文件 &rarr;</a>
                 </div>
+            </div>
+
+            <!-- 數據與作業 -->
+            <div class="glass-card p-10 rounded-[3rem] mb-12">
+                <h4 class="text-3xl font-bold text-primary-dark mb-8 border-b pb-3 border-gray-200">關鍵安全指標 (PSI)</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <!-- 數據項 1 -->
+                    <div class="p-4 rounded-xl bg-soft-blue/70 text-center hover:shadow-lg transition duration-300">
+                        <p class="text-5xl font-extrabold text-red-600">3</p>
+                        <p class="text-base text-primary-dark mt-2 font-medium">近月異常事件通報量</p>
+                    </div>
+                    <!-- 數據項 2 -->
+                    <div class="p-4 rounded-xl bg-soft-blue/70 text-center hover:shadow-lg transition duration-300">
+                        <p class="text-5xl font-extrabold text-amber-600">12 hrs</p>
+                        <p class="text-base text-primary-dark mt-2 font-medium">重大事件改善處理時效</p>
+                    </div>
+                </div>
                 
+                <h4 class="text-3xl font-bold text-primary-dark mb-6 mt-10 border-b pb-3 border-gray-200">相關作業連結</h4>
+                <ul class="space-y-4">
+                    <li class="p-4 rounded-xl bg-white/70 hover:bg-soft-blue/50 transition duration-200 border-l-4 border-accent-blue">
+                        <a href="#" class="flex justify-between items-center text-primary-dark font-medium">
+                            <span class="text-lg">當月品管會議紀錄與決議事項</span>
+                            <span class="text-accent-blue hover:text-blue-700 text-base font-semibold">點擊查閱 &rarr;</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <!-- ============== 內容區塊 3: 醫療品質 ============== -->
+        <div id="view-quality" class="content-view hidden">
+            <h3 class="text-4xl font-bold text-center text-white mb-14 bg-primary-dark/60 py-3 rounded-xl">醫療品質 - 成效與流程最佳化</h3>
+            
+            <!-- 組織職責: 醫療品質 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="glass-card p-8 rounded-3xl hover:bg-white/70 transition duration-300 transform hover:translate-y-[-4px]">
+                    <h4 class="text-3xl font-bold text-accent-blue mb-2">專責單位：醫療品質</h4>
+                    <p class="text-base text-gray-700">專注於醫療服務流程最佳化與成效監測，追求卓越的醫療成果。</p>
+                    <a href="#" class="text-base text-accent-blue hover:text-blue-700 mt-4 block font-semibold border-b border-accent-blue/50 w-fit">查看專案計畫 &rarr;</a>
+                </div>
+            </div>
+            
+            <!-- 數據與作業 -->
+            <div class="glass-card p-10 rounded-[3rem] mb-12">
+                <h4 class="text-3xl font-bold text-primary-dark mb-8 border-b pb-3 border-gray-200">關鍵品質指標 (PQI)</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <!-- 數據項 1 -->
+                    <div class="p-4 rounded-xl bg-soft-blue/70 text-center hover:shadow-lg transition duration-300">
+                        <p class="text-5xl font-extrabold text-green-600">99.8%</p>
+                        <p class="text-base text-primary-dark mt-2 font-medium">手部衛生遵循率 (Q3)</p>
+                    </div>
+                    <!-- 數據項 2 -->
+                    <div class="p-4 rounded-xl bg-soft-blue/70 text-center hover:shadow-lg transition duration-300">
+                        <p class="text-5xl font-extrabold text-green-600">95%</p>
+                        <p class="text-base text-primary-dark mt-2 font-medium">文件更新即時率</p>
+                    </div>
+                </div>
+                
+                <h4 class="text-3xl font-bold text-primary-dark mb-6 mt-10 border-b pb-3 border-gray-200">相關作業連結</h4>
+                <ul class="space-y-4">
+                    <li class="p-4 rounded-xl bg-white/70 hover:bg-soft-blue/50 transition duration-200 border-l-4 border-accent-blue">
+                        <a href="#" class="flex justify-between items-center text-primary-dark font-medium">
+                            <span class="text-lg">SOP：異常事件通報與處理流程</span>
+                            <span class="text-accent-blue hover:text-blue-700 text-base font-semibold">點擊查閱 &rarr;</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <!-- ============== 內容區塊 4: 活動成果 ============== -->
+        <div id="view-activity" class="content-view hidden">
+            <h3 class="text-4xl font-bold text-center text-white mb-14 bg-primary-dark/60 py-3 rounded-xl">活動成果與合規性審查</h3>
+            
+            <!-- 組織職責: 認證稽核與巡航報 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12">
                 <div class="glass-card p-8 rounded-3xl hover:bg-white/70 transition duration-300 transform hover:translate-y-[-4px]">
                     <h4 class="text-2xl font-bold text-accent-blue mb-2">認證稽核</h4>
                     <p class="text-base text-gray-700">規劃內外部評鑑、認證準備與合規性審查，確保符合國際標準。</p>
@@ -245,71 +353,22 @@
                     <p class="text-base text-gray-700">定期產出品管指標報告，提供決策參考與持續改進的數據基礎。</p>
                     <a href="#" class="text-base text-accent-blue hover:text-blue-700 mt-4 block font-semibold border-b border-accent-blue/50 w-fit">最新報告 &rarr;</a>
                 </div>
-
             </div>
-        </section>
-
-        <!-- KPI與日常作業 (模擬數據儀表板) -->
-        <section id="kpi-operations" class="mb-20">
-            <h3 class="text-4xl font-bold text-center text-white mb-14 bg-primary-dark/60 py-3 rounded-xl">日常業務透明化：KPI與作業總覽</h3>
             
-            <!-- 數據卡片區塊 -->
-            <div class="glass-card p-10 rounded-[3rem] mb-12">
-                <h4 class="text-3xl font-bold text-primary-dark mb-8 border-b pb-3 border-gray-200">即時品質指標 (KPI 儀表板模擬)</h4>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    
-                    <!-- 數據項 1 -->
-                    <div class="p-4 rounded-xl bg-soft-blue/70 text-center hover:shadow-lg transition duration-300">
-                        <p class="text-5xl font-extrabold text-accent-blue">99.8%</p>
-                        <p class="text-base text-primary-dark mt-2 font-medium">手部衛生遵循率 (Q3)</p>
-                    </div>
-                    
-                    <!-- 數據項 2 -->
-                    <div class="p-4 rounded-xl bg-soft-blue/70 text-center hover:shadow-lg transition duration-300">
-                        <p class="text-5xl font-extrabold text-accent-blue">3</p>
-                        <p class="text-base text-primary-dark mt-2 font-medium">近月異常事件通報量</p>
-                    </div>
-
-                    <!-- 數據項 3 -->
-                    <div class="p-4 rounded-xl bg-soft-blue/70 text-center hover:shadow-lg transition duration-300">
-                        <p class="text-5xl font-extrabold text-accent-blue">12 hrs</p>
-                        <p class="text-base text-primary-dark mt-2 font-medium">重大事件改善處理時效</p>
-                    </div>
-
-                    <!-- 數據項 4 -->
-                    <div class="p-4 rounded-xl bg-soft-blue/70 text-center hover:shadow-lg transition duration-300">
-                        <p class="text-5xl font-extrabold text-accent-blue">95%</p>
-                        <p class="text-base text-primary-dark mt-2 font-medium">文件更新即時率</p>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- 作業連結區塊 (透明列表) -->
+            <!-- 評鑑文件連結 -->
             <div class="glass-card p-10 rounded-[3rem]">
-                <h4 class="text-3xl font-bold text-primary-dark mb-8 border-b pb-3 border-gray-200">重要作業連結與文件</h4>
+                <h4 class="text-3xl font-bold text-primary-dark mb-6 border-b pb-3 border-gray-200">重要文件連結</h4>
                 <ul class="space-y-4">
-                    <li class="p-4 rounded-xl bg-white/70 hover:bg-soft-blue/50 transition duration-200 border-l-4 border-accent-blue">
-                        <a href="#" class="flex justify-between items-center text-primary-dark font-medium">
-                            <span class="text-lg">當月品管會議紀錄與決議事項</span>
-                            <span class="text-accent-blue hover:text-blue-700 text-base font-semibold">點擊查閱 &rarr;</span>
-                        </a>
-                    </li>
                     <li class="p-4 rounded-xl bg-white/70 hover:bg-soft-blue/50 transition duration-200 border-l-4 border-accent-blue">
                         <a href="#" class="flex justify-between items-center text-primary-dark font-medium">
                             <span class="text-lg">年度醫院評鑑準備文件彙整</span>
                             <span class="text-accent-blue hover:text-blue-700 text-base font-semibold">點擊查閱 &rarr;</span>
                         </a>
                     </li>
-                    <li class="p-4 rounded-xl bg-white/70 hover:bg-soft-blue/50 transition duration-200 border-l-4 border-accent-blue">
-                        <a href="#" class="flex justify-between items-center text-primary-dark font-medium">
-                            <span class="text-lg">SOP：異常事件通報與處理流程</span>
-                            <span class="text-accent-blue hover:text-blue-700 text-base font-semibold">點擊查閱 &rarr;</span>
-                        </a>
-                    </li>
                 </ul>
             </div>
-        </section>
+        </div>
+
 
     </main>
 
@@ -319,17 +378,44 @@
     </footer>
 
     <script>
-        // JS 邏輯控制 Landing Page 與 Dashboard 的切換
+        // JS 邏輯控制 Landing Page 與 Dashboard 的切換，以及導覽選單
         document.addEventListener('DOMContentLoaded', () => {
             const landingPage = document.getElementById('landing-page');
             const dashboardContainer = document.getElementById('main-dashboard-container');
             const enterButton = document.getElementById('enter-button');
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentViews = document.querySelectorAll('.content-view');
+
+            // 顯示特定的內容視圖
+            window.showView = function(viewName, clickedButton) {
+                // 隱藏所有內容
+                contentViews.forEach(view => {
+                    view.classList.add('hidden');
+                });
+                
+                // 顯示指定的內容
+                const targetView = document.getElementById(`view-${viewName}`);
+                if (targetView) {
+                    targetView.classList.remove('hidden');
+                }
+
+                // 更新按鈕的激活狀態
+                navButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                if (clickedButton) {
+                    clickedButton.classList.add('active');
+                }
+            }
             
             function showDashboard() {
                 // 隱藏起始頁，切換為儀表板模式
                 landingPage.classList.add('hidden');
                 dashboardContainer.classList.remove('hidden');
                 
+                // 預設顯示「關於我們」視圖
+                showView('about', document.querySelector('[data-view="about"]'));
+
                 // 直接滾動到頂部
                 window.scrollTo({ top: 0, behavior: 'smooth' }); 
             }
