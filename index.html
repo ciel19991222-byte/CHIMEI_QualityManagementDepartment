@@ -196,6 +196,34 @@
             transform: translateY(-6px) scale(1.06);
         }
         .about-content { position: relative; z-index: 10; }
+        /* about 內容標題與內容色調 */
+        .about-content h3 {
+            color: #ffffff; /* 標題白色 */
+        }
+        .about-content p,
+        .about-content li,
+        .about-content ol li {
+            color: #0f172a; /* 明顯深色調作為內容文字 */
+            font-weight: 600;
+        }
+        /* about 子選單預設隱藏，僅在使用者點選『關於我們』時顯示 */
+        .about-subnav { display: none; }
+        .about-subnav.visible { display: flex; }
+
+        /* 白色透明玻璃框（大事紀、工作職掌） */
+        .glass-panel {
+            background-color: rgba(255,255,255,0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            padding: 1.25rem;
+            box-shadow: 0 18px 40px rgba(2,6,23,0.12);
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+        }
+        .glass-panel:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 28px 60px rgba(2,6,23,0.16);
+        }
         
     </style>
 </head>
@@ -267,8 +295,8 @@
         <div class="glass-card rounded-none p-3 flex w-full justify-center gap-2 overflow-x-auto">
             <!-- 導覽按鈕: 使用 flex-1 確保它們平分容器空間，並限制整體寬度在大型螢幕上不過長 -->
             <div class="flex max-w-4xl w-full justify-between gap-2">
-                <!-- 注意: 初始選中狀態改為 active-about -->
-                <button data-view="about" class="nav-button active-about flex-1" onclick="showView('about', this)">
+                <!-- 注意: 初始選中狀態已移除，避免未點擊時顯示子選單或顏色 -->
+                <button data-view="about" class="nav-button flex-1" onclick="showView('about', this)">
                     關於我們
                 </button>
                 <button data-view="safety" class="nav-button flex-1" onclick="showView('safety', this)">
@@ -358,7 +386,7 @@
                     </div>
 
                     <!-- 大事紀 (placeholder，可後續填內容) -->
-                    <div id="about-timeline" class="about-content hidden">
+                    <div id="about-timeline" class="about-content hidden glass-panel">
                         <h3 class="text-3xl font-bold text-primary-dark mb-6">大事紀</h3>
                         <ul class="list-disc pl-6 text-gray-700 space-y-2">
                             <li>2025 年：品管部成立新專案 X。</li>
@@ -368,7 +396,7 @@
                     </div>
 
                     <!-- 工作職掌 -->
-                    <div id="about-duties" class="about-content hidden">
+                    <div id="about-duties" class="about-content hidden glass-panel">
                         <h3 class="text-3xl font-bold text-primary-dark mb-6">工作職掌（七大職掌）</h3>
                         <ol class="list-decimal pl-6 text-gray-700 space-y-3">
                             <li>檢視和建立指標、維護本院指標通報系統資訊化作業</li>
@@ -524,6 +552,7 @@
             const contentViews = document.querySelectorAll('.content-view');
             const aboutTabs = document.querySelectorAll('.about-tab');
             const aboutContents = document.querySelectorAll('.about-content');
+            const aboutSubnav = document.querySelector('.about-subnav');
 
             // 顯示特定的內容視圖
             window.showView = function(viewName, clickedButton) {
@@ -549,13 +578,17 @@
                     // 根據 viewName 添加對應的顏色類別
                     clickedButton.classList.add(`active-${viewName}`);
                 }
-                // 如果是 about，顯示 about 的預設子頁（組織架構）
+                // 控制 about 子選單的顯示：僅在使用者點選「關於我們」時顯示
                 if (viewName === 'about') {
-                    // 在 DOM 中找第一個 about-tab 並設定預設
+                    if (aboutSubnav) aboutSubnav.classList.add('visible');
+                    // 預設顯示組織架構子頁（org）
                     const defaultTab = document.querySelector('.about-tab[data-sub="org"]');
-                    if (typeof showAboutSub === 'function') {
-                        showAboutSub('org', defaultTab);
-                    }
+                    if (typeof showAboutSub === 'function') showAboutSub('org', defaultTab);
+                } else {
+                    // 隱藏 about 子選單與內容
+                    if (aboutSubnav) aboutSubnav.classList.remove('visible');
+                    aboutContents.forEach(c => c.classList.add('hidden'));
+                    aboutTabs.forEach(t => t.classList.remove('active'));
                 }
             }
             
@@ -566,13 +599,24 @@
                 // 顯示導航欄和儀表板內容
                 mainNav.classList.remove('hidden');
                 dashboardContainer.classList.remove('hidden');
-                
-                // 預設顯示「關於我們」視圖
-                // 在這裡呼叫 showView 以確保 'active-about' 狀態被設定
-                showView('about', document.querySelector('[data-view="about"]'));
+                // 不自動顯示任何主內容或 about 子選單
+                // 使用者需手動點選主導覽項目 (例如「關於我們」) 來顯示對應內容與子選單
 
                 // 直接滾動到頂部
                 window.scrollTo({ top: 0, behavior: 'smooth' }); 
+            }
+
+            // 當回到起始頁時，重置導覽與 about 子選單狀態，確保再次進入時為第一次樣子
+            window.resetNavState = function() {
+                // 移除主導覽 active 樣式
+                navButtons.forEach(b => {
+                    b.classList.remove('active-about', 'active-safety', 'active-quality', 'active-activity');
+                });
+                // 隱藏所有主內容與 about 子內容
+                contentViews.forEach(v => v.classList.add('hidden'));
+                aboutContents.forEach(c => c.classList.add('hidden'));
+                aboutTabs.forEach(t => t.classList.remove('active'));
+                if (aboutSubnav) aboutSubnav.classList.remove('visible');
             }
 
             // 顯示 about 子分頁
@@ -598,6 +642,8 @@
                 // 隱藏導航欄和儀表板內容
                 mainNav.classList.add('hidden');
                 dashboardContainer.classList.add('hidden');
+                // 重置導覽狀態，讓下次點選「進入品管部」呈現第一次進入的樣子
+                resetNavState();
                 
                 // 平滑滾動到頁面頂部
                 window.scrollTo({ top: 0, behavior: 'smooth' });
