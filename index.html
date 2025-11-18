@@ -19,7 +19,11 @@
                         'primary-dark': '#0f172a', // 深藍灰 (主文字色)
                         'accent-blue': '#2563eb', // 亮藍色 (重點色)
                         'soft-blue': '#e0f7fa', // 柔和淺藍
-                        'nav-purple': '#8b5cf6', // 亮紫色 (導航文字色)
+                        // 新增導航專屬顏色
+                        'nav-purple': '#8b5cf6', // 亮紫色 (關於我們)
+                        'nav-safety': '#ef4444', // 鮮紅色 (病人安全)
+                        'nav-quality': '#10b981', // 祖母綠 (醫療品質)
+                        'nav-activity': '#0ea5e9', // 天藍色 (活動成果)
                     }
                 }
             }
@@ -109,15 +113,34 @@
 
         /* 導航按鈕樣式 - 橫條狀 Tab Look */
         .nav-button {
-            /* 變更: 未選中時文字為白色 (text-white) */
-            @apply px-4 py-3 text-xl font-bold rounded-lg transition duration-300 text-white text-center 
+            /* 變更: 放大文字至 2XL */
+            @apply px-4 py-3 text-2xl font-bold rounded-lg transition duration-300 text-white text-center 
                    bg-transparent hover:bg-white/30 hover:shadow-none; 
         }
+        
+        /* 通用選中樣式基底 (縮放、陰影、底色) */
+        .active-base {
+            @apply bg-white/70 shadow-2xl transform scale-[1.2];
+        }
 
-        /* 選中按鈕樣式 */
-        .nav-button.active {
-            /* 變更: 選中時使用 nav-purple 文字，底色微透白，並放大 (scale-[1.1]) */
-            @apply bg-white/70 text-nav-purple shadow-lg transform scale-[1.1];
+        /* 選中按鈕樣式 1: 關於我們 (紫色) */
+        .nav-button.active-about {
+            @apply active-base text-nav-purple;
+        }
+
+        /* 選中按鈕樣式 2: 病人安全 (紅色) */
+        .nav-button.active-safety {
+            @apply active-base text-nav-safety;
+        }
+        
+        /* 選中按鈕樣式 3: 醫療品質 (綠色) */
+        .nav-button.active-quality {
+            @apply active-base text-nav-quality;
+        }
+
+        /* 選中按鈕樣式 4: 活動成果 (藍色) */
+        .nav-button.active-activity {
+            @apply active-base text-nav-activity;
         }
         
     </style>
@@ -185,13 +208,13 @@
     </main>
     
     <!-- 主導覽按鈕群組 - 長方區塊、透明玻璃底 (橫條狀) -->
-    <!-- 將 NAV 移出 main-dashboard-container，使其可以延伸到網頁兩側 -->
     <nav id="main-nav" class="sticky top-0 z-40 w-full hidden shadow-xl">
         <!-- 容器套用 glass-card 效果。使用 rounded-none 實現橫條狀邊緣延伸 -->
         <div class="glass-card rounded-none p-3 flex w-full justify-center gap-2 overflow-x-auto">
             <!-- 導覽按鈕: 使用 flex-1 確保它們平分容器空間，並限制整體寬度在大型螢幕上不過長 -->
             <div class="flex max-w-4xl w-full justify-between gap-2">
-                <button data-view="about" class="nav-button active flex-1" onclick="showView('about', this)">
+                <!-- 注意: 初始選中狀態改為 active-about -->
+                <button data-view="about" class="nav-button active-about flex-1" onclick="showView('about', this)">
                     關於我們
                 </button>
                 <button data-view="safety" class="nav-button flex-1" onclick="showView('safety', this)">
@@ -410,12 +433,16 @@
                     targetView.classList.remove('hidden');
                 }
 
-                // 更新按鈕的激活狀態
+                // 移除所有按鈕的激活狀態
                 navButtons.forEach(button => {
-                    button.classList.remove('active');
+                    // 移除所有特定的顏色類
+                    button.classList.remove('active-about', 'active-safety', 'active-quality', 'active-activity');
                 });
+
+                // 更新按鈕的激活狀態
                 if (clickedButton) {
-                    clickedButton.classList.add('active');
+                    // 根據 viewName 添加對應的顏色類別
+                    clickedButton.classList.add(`active-${viewName}`);
                 }
             }
             
@@ -428,6 +455,7 @@
                 dashboardContainer.classList.remove('hidden');
                 
                 // 預設顯示「關於我們」視圖
+                // 在這裡呼叫 showView 以確保 'active-about' 狀態被設定
                 showView('about', document.querySelector('[data-view="about"]'));
 
                 // 直接滾動到頂部
