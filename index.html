@@ -106,17 +106,17 @@
             }
         }
 
-        /* 導航按鈕樣式 - 獨立的方塊卡片風格 (白色文字, 深色框) */
+        /* 導航按鈕樣式 - 橫條狀 Tab Look */
         .nav-button {
-            /* 保持白色文字，使用暗色背景/邊框以達成「框框」效果 */
-            @apply px-6 py-3 text-lg font-semibold rounded-xl transition duration-300 shadow-lg text-white 
-                   bg-primary-dark/80 backdrop-blur-md border-2 border-primary-dark hover:bg-primary-dark hover:shadow-xl;
+            /* 黑色文字，透明背景，使用較小的 rounded-lg，移除陰影 */
+            @apply px-4 py-3 text-lg font-semibold rounded-lg transition duration-300 text-primary-dark text-center
+                   bg-transparent hover:bg-white/50 hover:shadow-none; 
         }
 
         /* 選中按鈕樣式 */
         .nav-button.active {
-            /* 選中時使用亮藍色強調，並放大 */
-            @apply bg-accent-blue border-accent-blue shadow-2xl transform scale-[1.05];
+            /* 選中時使用亮藍色填充，白色文字 */
+            @apply bg-accent-blue text-white shadow-none transform scale-100;
         }
         
     </style>
@@ -191,21 +191,22 @@
             &larr; 回到起始頁
         </button>
         
-        <!-- 主導覽按鈕群組 (Sticky 效果) -->
-        <nav class="sticky top-0 z-40 mb-12 flex justify-center lg:justify-start overflow-x-auto">
-            <!-- 使用 flex space-x-4 讓按鈕並排且有間隔 -->
-            <div class="flex space-x-4">
-                <!-- 導覽按鈕: 已套用 .nav-button 樣式 (獨立框框+白色文字) -->
-                <button data-view="about" class="nav-button active" onclick="showView('about', this)">
+        <!-- 主導覽按鈕群組 - 長方區塊、透明玻璃底 (橫條狀) -->
+        <nav class="sticky top-0 z-40 mb-12 flex justify-center w-full">
+            <!-- 容器套用 glass-card 效果，實現長方透明底。w-full max-w-4xl 確保它在桌面版上不會太寬 -->
+            <!-- 使用 flex-grow 將按鈕平分寬度，並使用 gap-2 創造輕微間隔 -->
+            <div class="glass-card rounded-[2rem] p-3 shadow-2xl flex w-full max-w-4xl justify-between gap-2 overflow-x-auto">
+                <!-- 導覽按鈕: 使用 flex-1 確保它們平分容器空間 -->
+                <button data-view="about" class="nav-button active flex-1" onclick="showView('about', this)">
                     關於我們
                 </button>
-                <button data-view="safety" class="nav-button" onclick="showView('safety', this)">
+                <button data-view="safety" class="nav-button flex-1" onclick="showView('safety', this)">
                     病人安全
                 </button>
-                <button data-view="quality" class="nav-button" onclick="showView('quality', this)">
+                <button data-view="quality" class="nav-button flex-1" onclick="showView('quality', this)">
                     醫療品質
                 </button>
-                <button data-view="activity" class="nav-button" onclick="showView('activity', this)">
+                <button data-view="activity" class="nav-button flex-1" onclick="showView('activity', this)">
                     活動成果
                 </button>
             </div>
