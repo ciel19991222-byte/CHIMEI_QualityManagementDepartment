@@ -179,6 +179,23 @@
         .nav-button.active-activity {
             background: linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%);
         }
+        /* about 子選單按鈕樣式 */
+        .about-subnav .about-tab {
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+            background: rgba(255,255,255,0.04);
+        }
+        .about-subnav .about-tab:hover {
+            transform: translateY(-4px) scale(1.05);
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 10px 28px rgba(2,6,23,0.12);
+        }
+        .about-subnav .about-tab.active {
+            background: linear-gradient(90deg, rgba(139,92,246,0.95), rgba(14,165,233,0.95));
+            color: #fff;
+            box-shadow: 0 14px 36px rgba(2,6,23,0.18);
+            transform: translateY(-6px) scale(1.06);
+        }
+        .about-content { position: relative; z-index: 10; }
         
     </style>
 </head>
@@ -280,41 +297,90 @@
 
             <!-- ============== 內容區塊 1: 關於我們 (核心價值) - 預設顯示 ============== -->
             <div id="view-about" class="content-view">
-                <section id="value" class="mb-20">
-                    <!-- 這就是往下移動時會看見的核心價值區塊 -->
-                    <h3 class="text-4xl font-bold text-center text-white mb-14 bg-primary-dark/60 py-3 rounded-xl">品質管理部核心價值</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        
-                        <!-- 卡片 1: 人本 (使用 glass-card) -->
-                        <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
-                            <div class="text-4xl mb-4 text-accent-blue">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            </div>
-                            <h4 class="text-xl font-bold mb-1 text-primary-dark">人本 (Patient-Centered)</h4>
-                            <p class="text-base text-gray-600">以病人為中心，提供具人性溫度的照護服務。</p>
-                        </div>
-
-                        <!-- 卡片 2: 創新 (使用 glass-card) -->
-                        <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
-                            <div class="text-4xl mb-4 text-accent-blue">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="2" rx="1" ry="1"/><path d="M12 11v6"/><path d="M9 14h6"/></svg>
-                            </div>
-                            <h4 class="text-xl font-bold mb-1 text-primary-dark">創新 (Innovation)</h4>
-                            <p class="text-base text-gray-600">持續優化流程，提升品質管理效能。</p>
-                        </div>
-
-                        <!-- 卡片 3: 卓越 (使用 glass-card) -->
-                        <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
-                            <div class="text-4xl mb-4 text-accent-blue">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            </div>
-                            <h4 class="text-xl font-bold mb-1 text-primary-dark">卓越 (Excellence)</h4>
-                            <p class="text-base text-gray-600">追求最高品質標準，成為高信賴照護典範。</p>
-                        </div>
-
+                <!-- 關於我們 子選單：組織架構 / 我們團隊 / 大事紀 / 工作職掌 -->
+                <div class="about-container">
+                    <div class="about-subnav flex flex-wrap justify-center gap-3 mb-6">
+                        <button class="about-tab px-4 py-2 text-sm font-semibold rounded-md bg-transparent text-white" data-sub="org" onclick="showAboutSub('org', this)">組織架構</button>
+                        <button class="about-tab px-4 py-2 text-sm font-semibold rounded-md bg-transparent text-white" data-sub="team" onclick="showAboutSub('team', this)">我們團隊</button>
+                        <button class="about-tab px-4 py-2 text-sm font-semibold rounded-md bg-transparent text-white" data-sub="timeline" onclick="showAboutSub('timeline', this)">大事紀</button>
+                        <button class="about-tab px-4 py-2 text-sm font-semibold rounded-md bg-transparent text-white" data-sub="duties" onclick="showAboutSub('duties', this)">工作職掌</button>
                     </div>
-                </section>
+
+                    <!-- 組織架構 (預設顯示)：把原本的核心價值區塊放在此處 -->
+                    <div id="about-org" class="about-content">
+                        <section id="value" class="mb-20">
+                            <h3 class="text-4xl font-bold text-center text-white mb-14 bg-primary-dark/60 py-3 rounded-xl">品質管理部核心價值</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
+                                    <div class="text-4xl mb-4 text-accent-blue">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    </div>
+                                    <h4 class="text-xl font-bold mb-1 text-primary-dark">人本 (Patient-Centered)</h4>
+                                    <p class="text-base text-gray-600">以病人為中心，提供具人性溫度的照護服務。</p>
+                                </div>
+
+                                <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
+                                    <div class="text-4xl mb-4 text-accent-blue">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="2" rx="1" ry="1"/><path d="M12 11v6"/><path d="M9 14h6"/></svg>
+                                    </div>
+                                    <h4 class="text-xl font-bold mb-1 text-primary-dark">創新 (Innovation)</h4>
+                                    <p class="text-base text-gray-600">持續優化流程，提升品質管理效能。</p>
+                                </div>
+
+                                <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
+                                    <div class="text-4xl mb-4 text-accent-blue">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    </div>
+                                    <h4 class="text-xl font-bold mb-1 text-primary-dark">卓越 (Excellence)</h4>
+                                    <p class="text-base text-gray-600">追求最高品質標準，成為高信賴照護典範。</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- 我們團隊 -->
+                    <div id="about-team" class="about-content hidden">
+                        <h3 class="text-3xl font-bold text-primary-dark mb-6">我們的團隊</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="glass-card p-6 rounded-2xl text-center">
+                                <h4 class="text-xl font-bold mb-1">部長</h4>
+                                <p class="text-sm text-gray-700">部長介紹：簡短職掌與背景描述。</p>
+                            </div>
+                            <div class="glass-card p-6 rounded-2xl text-center">
+                                <h4 class="text-xl font-bold mb-1">副部長</h4>
+                                <p class="text-sm text-gray-700">副部長介紹：簡短職掌與背景描述。</p>
+                            </div>
+                            <div class="glass-card p-6 rounded-2xl text-center">
+                                <h4 class="text-xl font-bold mb-1">品管員</h4>
+                                <p class="text-sm text-gray-700">其他品管員：職務分工與專長簡述。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 大事紀 (placeholder，可後續填內容) -->
+                    <div id="about-timeline" class="about-content hidden">
+                        <h3 class="text-3xl font-bold text-primary-dark mb-6">大事紀</h3>
+                        <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                            <li>2025 年：品管部成立新專案 X。</li>
+                            <li>2024 年：導入病人安全資訊系統。</li>
+                            <li>2023 年：完成年度品質改進計畫。</li>
+                        </ul>
+                    </div>
+
+                    <!-- 工作職掌 -->
+                    <div id="about-duties" class="about-content hidden">
+                        <h3 class="text-3xl font-bold text-primary-dark mb-6">工作職掌（七大職掌）</h3>
+                        <ol class="list-decimal pl-6 text-gray-700 space-y-3">
+                            <li>檢視和建立指標、維護本院指標通報系統資訊化作業</li>
+                            <li>統整和建構本院通報系統、建立和監測病人安全資訊系統</li>
+                            <li>規劃、推動和監測疾病診療計畫指引及品質指標</li>
+                            <li>規劃和協助辦理品質與病安相關教育訓練課程</li>
+                            <li>各類相關標準作業流程修訂</li>
+                            <li>推動病人安全目標及醫療品質改善活動</li>
+                            <li>協助院內相關會議資料彙整</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
 
 
@@ -456,6 +522,8 @@
             
             const navButtons = document.querySelectorAll('.nav-button');
             const contentViews = document.querySelectorAll('.content-view');
+            const aboutTabs = document.querySelectorAll('.about-tab');
+            const aboutContents = document.querySelectorAll('.about-content');
 
             // 顯示特定的內容視圖
             window.showView = function(viewName, clickedButton) {
@@ -481,6 +549,14 @@
                     // 根據 viewName 添加對應的顏色類別
                     clickedButton.classList.add(`active-${viewName}`);
                 }
+                // 如果是 about，顯示 about 的預設子頁（組織架構）
+                if (viewName === 'about') {
+                    // 在 DOM 中找第一個 about-tab 並設定預設
+                    const defaultTab = document.querySelector('.about-tab[data-sub="org"]');
+                    if (typeof showAboutSub === 'function') {
+                        showAboutSub('org', defaultTab);
+                    }
+                }
             }
             
             function showDashboard() {
@@ -497,6 +573,22 @@
 
                 // 直接滾動到頂部
                 window.scrollTo({ top: 0, behavior: 'smooth' }); 
+            }
+
+            // 顯示 about 子分頁
+            window.showAboutSub = function(subName, clickedBtn) {
+                // 隱藏所有 about 內容
+                aboutContents.forEach(c => c.classList.add('hidden'));
+
+                // 移除 about-tab 的 active 樣式
+                aboutTabs.forEach(t => t.classList.remove('active'));
+
+                // 顯示指定的子內容
+                const target = document.getElementById(`about-${subName}`);
+                if (target) target.classList.remove('hidden');
+
+                // 標記按鈕為 active
+                if (clickedBtn) clickedBtn.classList.add('active');
             }
 
             window.showLandingPage = function() {
