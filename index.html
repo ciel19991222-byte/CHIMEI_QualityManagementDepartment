@@ -323,7 +323,35 @@
         <!-- 調整內容頂部間距，因為導航條已移至外面 -->
         <div class="pt-8"> 
 
-            <!-- ============== 內容區塊 1: 關於我們 (核心價值) - 預設顯示 ============== -->
+            <!-- 將核心價值放到儀表板最上方 -->
+            <section id="core-values-top" class="mb-12">
+                <h3 class="text-3xl font-bold text-center text-white mb-8 bg-primary-dark/60 py-2 rounded-xl">品質管理部核心價值</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-card p-6 rounded-3xl text-center shadow-lg">
+                        <div class="text-3xl mb-3 text-accent-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <h4 class="text-lg font-bold mb-1 text-primary-dark">人本 (Patient-Centered)</h4>
+                        <p class="text-sm text-gray-700">以病人為中心，提供具人性溫度的照護服務。</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl text-center shadow-lg">
+                        <div class="text-3xl mb-3 text-accent-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="2" rx="1" ry="1"/><path d="M12 11v6"/><path d="M9 14h6"/></svg>
+                        </div>
+                        <h4 class="text-lg font-bold mb-1 text-primary-dark">創新 (Innovation)</h4>
+                        <p class="text-sm text-gray-700">持續優化流程，提升品質管理效能。</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl text-center shadow-lg">
+                        <div class="text-3xl mb-3 text-accent-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <h4 class="text-lg font-bold mb-1 text-primary-dark">卓越 (Excellence)</h4>
+                        <p class="text-sm text-gray-700">追求最高品質標準，成為高信賴照護典範。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============== 內容區塊 1: 關於我們 (原本內容已清空) ============== -->
             <div id="view-about" class="content-view">
                 <!-- 關於我們 子選單：組織架構 / 我們團隊 / 大事紀 / 工作職掌 -->
                 <div class="about-container">
@@ -334,36 +362,9 @@
                         <button class="about-tab px-4 py-2 text-sm font-semibold rounded-md bg-transparent text-white" data-sub="duties" onclick="showAboutSub('duties', this)">工作職掌</button>
                     </div>
 
-                    <!-- 組織架構 (預設顯示)：把原本的核心價值區塊放在此處 -->
+                    <!-- 組織架構 (內容已清空，保持空白) -->
                     <div id="about-org" class="about-content">
-                        <section id="value" class="mb-20">
-                            <h3 class="text-4xl font-bold text-center text-white mb-14 bg-primary-dark/60 py-3 rounded-xl">品質管理部核心價值</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
-                                    <div class="text-4xl mb-4 text-accent-blue">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                    </div>
-                                    <h4 class="text-xl font-bold mb-1 text-primary-dark">人本 (Patient-Centered)</h4>
-                                    <p class="text-base text-gray-600">以病人為中心，提供具人性溫度的照護服務。</p>
-                                </div>
-
-                                <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
-                                    <div class="text-4xl mb-4 text-accent-blue">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="2" rx="1" ry="1"/><path d="M12 11v6"/><path d="M9 14h6"/></svg>
-                                    </div>
-                                    <h4 class="text-xl font-bold mb-1 text-primary-dark">創新 (Innovation)</h4>
-                                    <p class="text-base text-gray-600">持續優化流程，提升品質管理效能。</p>
-                                </div>
-
-                                <div class="glass-card p-8 rounded-3xl text-center hover:bg-white/90 transition duration-300 transform hover:scale-[1.03] shadow-lg">
-                                    <div class="text-4xl mb-4 text-accent-blue">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                    </div>
-                                    <h4 class="text-xl font-bold mb-1 text-primary-dark">卓越 (Excellence)</h4>
-                                    <p class="text-base text-gray-600">追求最高品質標準，成為高信賴照護典範。</p>
-                                </div>
-                            </div>
-                        </section>
+                        <!-- intentionally left blank -->
                     </div>
 
                     <!-- 我們團隊 -->
@@ -602,6 +603,14 @@
                 // 不自動顯示任何主內容或 about 子選單
                 // 使用者需手動點選主導覽項目 (例如「關於我們」) 來顯示對應內容與子選單
 
+                // 點進儀表板時，隱藏 landing 上的標題與名言（但不刪除，回到起始頁時會恢復）
+                const landingTitle = document.querySelector('#landing-left h1');
+                const landingDesc = document.querySelector('#landing-left p');
+                const landingQuote = document.getElementById('landing-right');
+                if (landingTitle) landingTitle.classList.add('hidden');
+                if (landingDesc) landingDesc.classList.add('hidden');
+                if (landingQuote) landingQuote.classList.add('hidden');
+
                 // 直接滾動到頂部
                 window.scrollTo({ top: 0, behavior: 'smooth' }); 
             }
@@ -644,6 +653,13 @@
                 dashboardContainer.classList.add('hidden');
                 // 重置導覽狀態，讓下次點選「進入品管部」呈現第一次進入的樣子
                 resetNavState();
+                // 恢復 landing 上原本隱藏的標題、描述與名言
+                const landingTitle = document.querySelector('#landing-left h1');
+                const landingDesc = document.querySelector('#landing-left p');
+                const landingQuote = document.getElementById('landing-right');
+                if (landingTitle) landingTitle.classList.remove('hidden');
+                if (landingDesc) landingDesc.classList.remove('hidden');
+                if (landingQuote) landingQuote.classList.remove('hidden');
                 
                 // 平滑滾動到頁面頂部
                 window.scrollTo({ top: 0, behavior: 'smooth' });
