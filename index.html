@@ -325,28 +325,21 @@
 
             <!-- 將核心價值放到儀表板最上方 -->
             <section id="core-values-top" class="mb-12">
-                <h3 class="text-3xl font-bold text-center text-white mb-8 bg-primary-dark/60 py-2 rounded-xl">品質管理部核心價值</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="glass-card p-6 rounded-3xl text-center shadow-lg">
-                        <div class="text-3xl mb-3 text-accent-blue">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <h3 class="text-3xl font-bold text-center text-white mb-8 bg-primary-dark/60 py-2 rounded-xl">核心價值</h3>
+                <div class="glass-card p-6 rounded-3xl shadow-lg max-w-4xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div>
+                            <h4 class="text-lg font-bold mb-1 text-primary-dark">人本 (Patient-Centered)</h4>
+                            <p class="text-sm text-gray-700">以病人為中心，提供具人性溫度的照護服務。</p>
                         </div>
-                        <h4 class="text-lg font-bold mb-1 text-primary-dark">人本 (Patient-Centered)</h4>
-                        <p class="text-sm text-gray-700">以病人為中心，提供具人性溫度的照護服務。</p>
-                    </div>
-                    <div class="glass-card p-6 rounded-3xl text-center shadow-lg">
-                        <div class="text-3xl mb-3 text-accent-blue">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="2" rx="1" ry="1"/><path d="M12 11v6"/><path d="M9 14h6"/></svg>
+                        <div>
+                            <h4 class="text-lg font-bold mb-1 text-primary-dark">創新 (Innovation)</h4>
+                            <p class="text-sm text-gray-700">持續優化流程，提升品質管理效能。</p>
                         </div>
-                        <h4 class="text-lg font-bold mb-1 text-primary-dark">創新 (Innovation)</h4>
-                        <p class="text-sm text-gray-700">持續優化流程，提升品質管理效能。</p>
-                    </div>
-                    <div class="glass-card p-6 rounded-3xl text-center shadow-lg">
-                        <div class="text-3xl mb-3 text-accent-blue">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        <div>
+                            <h4 class="text-lg font-bold mb-1 text-primary-dark">卓越 (Excellence)</h4>
+                            <p class="text-sm text-gray-700">追求最高品質標準，成為高信賴照護典範。</p>
                         </div>
-                        <h4 class="text-lg font-bold mb-1 text-primary-dark">卓越 (Excellence)</h4>
-                        <p class="text-sm text-gray-700">追求最高品質標準，成為高信賴照護典範。</p>
                     </div>
                 </div>
             </section>
@@ -611,8 +604,21 @@
                 if (landingDesc) landingDesc.classList.add('hidden');
                 if (landingQuote) landingQuote.classList.add('hidden');
 
-                // 直接滾動到頂部
-                window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                // 將核心價值節點移到儀表板容器最上方，並滾動到該區塊
+                const coreValues = document.getElementById('core-values-top');
+                if (coreValues) {
+                    // 將核心價值移到主導覽 (`#main-nav`) 之前，讓它顯示在四個導覽按鈕的上方
+                    if (mainNav && mainNav.parentNode && mainNav.previousElementSibling !== coreValues) {
+                        mainNav.parentNode.insertBefore(coreValues, mainNav);
+                    }
+                    // 短延遲後平滑滾動到核心價值位置（確保元素已呈現）
+                    setTimeout(() => {
+                        coreValues.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 80);
+                } else {
+                    // fallback: 直接滾動到頂部
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
             }
 
             // 當回到起始頁時，重置導覽與 about 子選單狀態，確保再次進入時為第一次樣子
@@ -660,6 +666,14 @@
                 if (landingTitle) landingTitle.classList.remove('hidden');
                 if (landingDesc) landingDesc.classList.remove('hidden');
                 if (landingQuote) landingQuote.classList.remove('hidden');
+                // 如有需要，將核心價值還原回儀表板內部（放回原本的 top 容器中）
+                const coreValues = document.getElementById('core-values-top');
+                if (coreValues && dashboardContainer) {
+                    const dashboardTop = dashboardContainer.querySelector('div.pt-8') || dashboardContainer;
+                    if (dashboardTop.firstElementChild !== coreValues) {
+                        dashboardTop.insertBefore(coreValues, dashboardTop.firstElementChild);
+                    }
+                }
                 
                 // 平滑滾動到頁面頂部
                 window.scrollTo({ top: 0, behavior: 'smooth' });
