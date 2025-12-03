@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇美醫院品質管理部 - 儀表板</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 保留 index.html 的主要樣式（大地色系 & glass-card） */
+        body {
+            background-color: #fbf8f4;
+            background-image: linear-gradient(135deg, #fefdfb 0%, #f7f3ed 100%);
+            min-height: 100vh;
+            color: #49372B;
+            position: relative;
+            font-family: Inter, 'Noto Sans TC', sans-serif;
+        }
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(.25,.8,.25,1);
+            position: relative;
+            z-index: 3;
+            border-radius: 2.5rem;
+        }
+        .glass-card:hover { transform: translateY(-3px); box-shadow: 0 15px 45px rgba(0,0,0,0.1); }
+        .nav-button {
+            display: inline-flex; align-items:center; justify-content:center;
+            padding: 0.8rem 1.2rem; font-size:1.05rem; font-weight:500; border-radius:9999px;
+            color:#49372B; background:#ffffff; border:1px solid #e0d9d0; transition:all .3s; box-shadow:0 2px 8px rgba(0,0,0,0.06);
+        }
+        .nav-button:hover, .nav-button:focus { background:#f7f3ed; transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+        .nav-button.active-nav { transform:translateY(-3px) scale(1.02); font-weight:600; color:#fff; border:1px solid transparent; box-shadow:0 8px 20px rgba(0,0,0,0.2); }
+        .nav-button.active-nav-about{ background: linear-gradient(45deg,#ff9933,#E96C00);} 
+        .nav-button.active-nav-safety{ background: linear-gradient(45deg,#8D5A2C,#6B4226);} 
+        .nav-button.active-nav-quality{ background: linear-gradient(45deg,#D2B48C,#AF8E6C);} 
+        .nav-button.active-nav-activity{ background: linear-gradient(45deg,#49372B,#2C1C10);} 
+        .about-subnav .about-tab{ background:#ffffff; color:#49372B; border:1px solid #e0d9d0; border-radius:.75rem; }
+        .about-subnav .about-tab.active{ background:#E96C00; color:#fff; font-weight:600; box-shadow:0 4px 12px rgba(233,108,0,0.3); }
+        .dashboard-section-title{ color:#E96C00; border-bottom:3px solid #E96C00; font-weight:700; }
+        footer { background-color: rgba(255,255,255,0.7); color:#6B4226; border-top:1px solid rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="font-sans text-primary-text">
+
+    <!-- 主導覽按鈕群組 -->
+    <nav id="main-nav" class="sticky top-0 z-40 w-full border-b border-gray-100 shadow-md shadow-gray-200">
+        <div class="bg-white/90 backdrop-blur-sm p-4 flex w-full justify-center gap-3 overflow-x-auto">
+            <div class="flex max-w-5xl w-full justify-center gap-4">
+                <button data-view="about" class="nav-button flex-1" onclick="showView('about', this)">關於我們</button>
+                <button data-view="safety" class="nav-button flex-1" onclick="showView('safety', this)">病人安全</button>
+                <button data-view="quality" class="nav-button flex-1" onclick="showView('quality', this)">醫療品質</button>
+                <button data-view="activity" class="nav-button flex-1" onclick="showView('activity', this)">活動成果</button>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-dashboard-container" class="pt-12">
+        <!-- 回到起始頁按鈕（右下圓形房子圖示） -->
+        <a href="index.html" class="fixed right-6 bottom-6 z-50 w-12 h-12 rounded-full bg-white text-gray-600 border border-gray-300 shadow-md hover:bg-gray-50 flex items-center justify-center transition duration-200" aria-label="回首頁" title="回首頁">
+            <!-- House SVG icon -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M3 10.5L12 4l9 6.5" stroke="#49372B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 21V11.5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1V21" stroke="#49372B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 21v-6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6" stroke="#49372B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+
+        <!-- 核心價值 -->
+        <section id="core-values-top" class="mb-16 max-w-5xl mx-auto">
+            <h3 class="dashboard-section-title text-3xl font-bold text-center mb-10 py-3 max-w-lg mx-auto">核心價值</h3>
+            <div class="glass-card p-8 rounded-[2.5rem] shadow-xl">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="p-4 rounded-xl transition duration-200 border-b-4 border-accent-orange hover:bg-orange-50">
+                        <h4 class="text-2xl font-extrabold mb-1 text-accent-orange">人本</h4>
+                        <p class="text-sm text-gray-600">以病人為中心，提供具人性溫度的照護服務。</p>
+                    </div>
+                    <div class="p-4 rounded-xl transition duration-200 border-b-4 border-accent-brown hover:bg-amber-50">
+                        <h4 class="text-2xl font-extrabold mb-1 text-accent-brown">創新</h4>
+                        <p class="text-sm text-gray-600">持續優化流程，提升品質管理效能。</p>
+                    </div>
+                    <div class="p-4 rounded-xl transition duration-200 border-b-4 border-accent-tan hover:bg-stone-50">
+                        <h4 class="text-2xl font-extrabold mb-1 text-accent-tan">卓越</h4>
+                        <p class="text-sm text-gray-600">追求最高品質標準，成為高信賴照護典範。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 內容視圖容器 -->
+        <div class="max-w-6xl mx-auto space-y-10">
+            <!-- ABOUT -->
+            <div id="view-about" class="content-view">
+                <div class="about-subnav flex flex-wrap justify-center gap-4 mb-10 visible">
+                    <button class="about-tab px-6 py-2 text-sm font-medium" data-sub="org" onclick="showAboutSub('org', this)">組織架構</button>
+                    <button class="about-tab px-6 py-2 text-sm font-medium" data-sub="team" onclick="showAboutSub('team', this)">我們團隊</button>
+                    <button class="about-tab px-6 py-2 text-sm font-medium" data-sub="timeline" onclick="showAboutSub('timeline', this)">大事紀</button>
+                    <button class="about-tab px-6 py-2 text-sm font-medium" data-sub="duties" onclick="showAboutSub('duties', this)">工作職掌</button>
+                </div>
+                <div id="about-org" class="about-content glass-card p-6 md:p-10 rounded-[2.5rem]"><h3 class="text-3xl font-bold text-accent-orange mb-6">組織架構圖</h3><p class="text-gray-600">此處將放置組織架構圖。</p></div>
+                <div id="about-team" class="about-content hidden glass-card p-6 md:p-10 rounded-[2.5rem]"><h3 class="text-3xl font-bold text-accent-orange mb-6">核心團隊</h3></div>
+                <div id="about-timeline" class="about-content hidden glass-card p-6 md:p-10 rounded-[2.5rem]"><h3 class="text-3xl font-bold text-accent-orange mb-6">系統事件日誌</h3></div>
+                <div id="about-duties" class="about-content hidden glass-card p-6 md:p-10 rounded-[2.5rem]"><h3 class="text-3xl font-bold text-accent-orange mb-6">核心職掌</h3></div>
+            </div>
+
+            <!-- SAFETY -->
+            <div id="view-safety" class="content-view hidden">
+                <h3 class="text-3xl font-bold text-accent-brown">病人安全 - 風險感知與預警系統</h3>
+            </div>
+
+            <!-- QUALITY -->
+            <div id="view-quality" class="content-view hidden">
+                <h3 class="text-3xl font-bold text-accent-tan">醫療品質 - 成效數據分析</h3>
+            </div>
+
+            <!-- ACTIVITY -->
+            <div id="view-activity" class="content-view hidden">
+                <h3 class="text-3xl font-bold text-primary-text">活動成果與合規性審查</h3>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center p-6 bg-white/70 backdrop-blur-sm relative z-10 w-full border-t border-gray-100">
+        <p class="text-gray-500">&copy; 2025 CHIMEI Medical Center Quality Management Dept.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentViews = document.querySelectorAll('.content-view');
+            const aboutTabs = document.querySelectorAll('.about-tab');
+            const aboutContents = document.querySelectorAll('.about-content');
+
+            window.showView = function(viewName, clickedButton) {
+                contentViews.forEach(v => v.classList.add('hidden'));
+                const targetView = document.getElementById(`view-${viewName}`);
+                if (targetView) targetView.classList.remove('hidden');
+                navButtons.forEach(button => button.classList.remove('active-nav-about','active-nav-safety','active-nav-quality','active-nav-activity'));
+                if (clickedButton) {
+                    let colorClass = '';
+                    switch(viewName){ case 'about': colorClass='active-nav-about'; break; case 'safety': colorClass='active-nav-safety'; break; case 'quality': colorClass='active-nav-quality'; break; case 'activity': colorClass='active-nav-activity'; break; }
+                    if(colorClass) clickedButton.classList.add(colorClass);
+                }
+                if (viewName === 'about') {
+                    const defaultTab = document.querySelector('.about-tab[data-sub="org"]');
+                    if (typeof showAboutSub === 'function') showAboutSub('org', defaultTab);
+                } else {
+                    aboutContents.forEach(c => c.classList.add('hidden'));
+                    aboutTabs.forEach(t => t.classList.remove('active'));
+                }
+            }
+
+            window.showAboutSub = function(subName, clickedBtn) {
+                aboutContents.forEach(c => c.classList.add('hidden'));
+                aboutTabs.forEach(t => t.classList.remove('active'));
+                const target = document.getElementById(`about-${subName}`);
+                if (target) target.classList.remove('hidden');
+                if (clickedBtn) clickedBtn.classList.add('active');
+            }
+
+            // 初始顯示: 顯示 about 並顯示核心價值（core-values 已在頁面上）
+            const firstButton = document.querySelector('.nav-button[data-view="about"]');
+            if (firstButton) showView('about', firstButton);
+        });
+    </script>
+</body>
+</html>

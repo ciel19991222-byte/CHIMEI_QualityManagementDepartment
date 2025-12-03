@@ -246,9 +246,13 @@
     <!-- ============== 模式 2: 主儀表板 (Dashboard) ============== -->
     <main id="main-dashboard-container" class="hidden">
 
-        <!-- 回到起始頁按鈕 - 大地色系按鈕 -->
-        <button onclick="showLandingPage()" class="fixed top-4 right-4 z-50 px-4 py-2 text-sm font-semibold rounded-full bg-white text-gray-600 border border-gray-300 shadow-md hover:bg-gray-50 transition duration-300">
-            &larr; 登出介面
+        <!-- 回到起始頁按鈕（右下圓形房子圖示），SPA 使用 showLandingPage() -->
+        <button onclick="showLandingPage()" class="fixed right-6 bottom-6 z-50 w-12 h-12 rounded-full bg-white text-gray-600 border border-gray-300 shadow-md hover:bg-gray-50 flex items-center justify-center transition duration-200" aria-label="回首頁" title="回首頁">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M3 10.5L12 4l9 6.5" stroke="#49372B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 21V11.5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1V21" stroke="#49372B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 21v-6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6" stroke="#49372B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </button>
         
         <!-- 調整內容頂部間距 -->
@@ -632,7 +636,8 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            enterButton.addEventListener('click', showDashboard);
+            // 導向新的 dashboard 頁面（開新頁面顯示四導覽列與核心價值）
+            enterButton.addEventListener('click', function() { window.location.href = 'dashboard.html'; });
 
             // 確保初始狀態正確
             showLandingPage();
